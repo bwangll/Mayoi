@@ -5,7 +5,7 @@ needs a `## <version>` section here, or its build fails.
 
 ## Unreleased
 
-- The app icon draws the `</>` glyph on a clear glass tile in place of the blue one.
+- The app icon and the welcome page's logo show a Liquid Glass `</>` tile in place of the blue one.
 - When an update check fails, the update window shows the whole error, with no tooltip over it.
 - The panes of a merge wrap long lines when **Word Wrap** is on, and `⌥Z` toggles wrapping for that merge tab.
 - Conflict marks, gutter buttons and synced scrolling in a merge follow wrapped rows.

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	_ "embed"
 	"fmt"
-	"image"
 	"image/png"
 	"math"
 	"os"
@@ -1305,26 +1304,20 @@ func abs(n int) int {
 	return n
 }
 
-// iconArt is the app icon's art, which tools/icongen places on the
-// macOS icon grid.
+// iconArt is macOS's rendering of AppIcon.icon, its 824 px tile cut from
+// the 1024 px icon, which tools/icongen places on the macOS icon grid.
 //
 //go:embed icon-art.png
 var iconArt []byte
 
-// iconFrame is the width of the art's own pixel tile border, which the
-// icon crops, in pixels of the 1254 px art; as in tools/icongen.
-const iconFrame = 52
-
-// logo is Mayoi's mark: the app icon itself, its border cropped as on
-// the Dock, decoded the first time the welcome page shows.
+// logo is Mayoi's mark: the app icon itself, decoded the first time the
+// welcome page shows.
 var logo = sync.OnceValue(func() *ui.Bitmap {
 	art, err := png.Decode(bytes.NewReader(iconArt))
 	if err != nil {
 		panic(err)
 	}
-	return ui.NewBitmap(art.(interface {
-		SubImage(image.Rectangle) image.Image
-	}).SubImage(art.Bounds().Inset(iconFrame)))
+	return ui.NewBitmap(art)
 })
 
 // welcome shows while no file is open: what to start with, and the
