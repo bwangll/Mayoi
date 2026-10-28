@@ -1,0 +1,26 @@
+name: macOS build
+
+on:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    # The Icon Composer icon, macos.icon, compiles only with Xcode 26's actool.
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - run: xcodebuild -version && xcrun actool --version
+      - run: go tool mygo build -platform darwin/arm64
+      # mygo build only warns when it cannot compile the .icon.
+      - name: Check the compiled icon
+        run: test -f build/darwin-arm64/Mayoi.app/Contents/Resources/Assets.car
+      - run: ditto -c -k --keepParent build/darwin-arm64/Mayoi.app Mayoi.app.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Mayoi-darwin-arm64
+          path: Mayoi.app.zip
